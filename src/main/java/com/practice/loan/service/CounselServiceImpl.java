@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import com.practice.loan.exception.BaseException;
+import com.practice.loan.exception.ResultType;
 
 @Service
 @RequiredArgsConstructor
@@ -25,5 +27,14 @@ public class CounselServiceImpl implements CounselService {
     Counsel created = counselRepository.save(counsel);
 
     return modelMapper.map(created, Response.class);
+  }
+
+  @Override
+  public Response get(Long counselId) {
+    Counsel counsel = counselRepository.findById(counselId).orElseThrow(() -> {
+      throw new BaseException(ResultType.SYSTEM_ERROR);
+    });
+
+    return modelMapper.map(counsel, Response.class);
   }
 }
